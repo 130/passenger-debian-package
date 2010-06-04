@@ -1,0 +1,34 @@
+Index: passenger-2.2.11/Rakefile
+===================================================================
+--- passenger-2.2.11.orig/Rakefile	2010-06-03 04:10:40.000000000 +0300
++++ passenger-2.2.11/Rakefile	2010-06-04 06:42:09.000000000 +0300
+@@ -18,10 +18,10 @@
+ 
+ $LOAD_PATH.unshift("#{File.dirname(__FILE__)}/lib")
+ $LOAD_PATH.unshift("#{File.dirname(__FILE__)}/misc")
+-require 'rubygems'
++#require 'rubygems' # commented by debian/patches/100603_03_comment_rubygems_related_clauses_in_rakefile.patch
+ require 'pathname'
+ require 'rake/rdoctask'
+-require 'rake/gempackagetask'
++#require 'rake/gempackagetask' # commented by debian/patches/100603_03_comment_rubygems_related_clauses_in_rakefile.patch
+ require 'rake/extensions'
+ require 'rake/cplusplus'
+ require 'phusion_passenger/platform_info'
+@@ -644,7 +644,7 @@
+ 
+ 
+ ##### Packaging
+-
++=begin commented by debian/patches/100603_03_comment_rubygems_related_clauses_in_rakefile.patch
+ spec = Gem::Specification.new do |s|
+ 	s.platform = Gem::Platform::RUBY
+ 	s.homepage = "http://www.modrails.com/"
+@@ -736,6 +736,7 @@
+ Rake::Task['package:gem'].prerequisites.unshift(:doc)
+ Rake::Task['package:force'].prerequisites.unshift(:doc)
+ task :clobber => :'package:clean'
++=end
+ 
+ desc "Create a fakeroot, useful for building native packages"
+ task :fakeroot => [:apache2, :native_support, :doc] do

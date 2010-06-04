@@ -1,0 +1,5 @@
+version=3
+http://rubyforge.org/frs/?group_id=5873 \
+  /frs/download\.php/\d{5}/passenger-([\d.]+)\.tar\.gz \
+  debian uupdate
+

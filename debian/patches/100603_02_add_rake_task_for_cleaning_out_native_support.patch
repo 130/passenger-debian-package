@@ -1,0 +1,15 @@
+Index: passenger-2.2.11/Rakefile
+===================================================================
+--- passenger-2.2.11.orig/Rakefile	2010-06-03 03:03:18.000000000 +0300
++++ passenger-2.2.11/Rakefile	2010-06-03 03:06:51.000000000 +0300
+@@ -87,7 +87,9 @@
+ 	sh "cd ext/phusion_passenger && make"
+ end
+ 
+-task :clean do
++task :clean => 'native_support:clean'
++desc "Clean all compiled Ruby C extension files"
++task 'native_support:clean' do
+ 	sh "cd ext/phusion_passenger && make clean" if File.exist?('ext/phusion_passenger/Makefile')
+ 	sh "rm -f ext/phusion_passenger/Makefile"
+ end

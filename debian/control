@@ -1,0 +1,121 @@
+Source: passenger
+Section: web
+Priority: optional
+Maintainer: Leonid Borisenko <leo.borisenko@gmail.com>
+Build-Depends: debhelper (>= 7.0.50), cdbs, rake, rake-rubyee1.8,
+ apache2-mpm-worker | apache2-mpm, apache2-threaded-dev, libapr1-dev, ruby1.8,
+ ruby1.8-dev, rdoc1.8, rubyee1.8, rubyee1.8-dev, ruby1.9.1, ruby1.9.1-dev,
+ doxygen, asciidoc (>= 8.2.5), graphviz, source-highlight
+Standards-Version: 3.8.4
+Homepage: http://modrails.com
+Vcs-Git: git://github.com/130/passenger-debian-package.git
+Vcs-Browser: http://github.com/130/passenger-debian-package
+
+Package: libpassenger-ruby
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libpassenger-ruby1.8
+Description: Phusion Passenger spawn server
+ Phusion Passenger - a.k.a. mod_rails or mod_rack - makes deployment of Ruby
+ web applications, such as those built on the revolutionary Ruby on Rails web
+ framework, a breeze.
+ .
+ This package provides the bits of Phusion Passenger common to both its Apache
+ and nginx support under the default Ruby version.
+
+Package: libpassenger-ruby1.8
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ruby1.8, rubygems1.8 (>= 1.2)
+Provides: libpassenger-ruby-any
+Description: Phusion Passenger spawn server (Ruby 1.8)
+ Phusion Passenger - a.k.a. mod_rails or mod_rack - makes deployment of Ruby
+ web applications, such as those built on the revolutionary Ruby on Rails web
+ framework, a breeze.
+ .
+ This package provides the bits of Phusion Passenger common to both its Apache
+ and nginx support under Ruby 1.8.
+
+Package: libpassenger-rubyee1.8
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, rubyee1.8, rubygemsee1.8 (>= 1.2)
+Provides: libpassenger-ruby-any
+Description: Phusion Passenger spawn server (Ruby Enterprise Edition 1.8)
+ Phusion Passenger - a.k.a. mod_rails or mod_rack - makes deployment of Ruby
+ web applications, such as those built on the revolutionary Ruby on Rails web
+ framework, a breeze.
+ .
+ This package provides the bits of Phusion Passenger common to both its Apache
+ and nginx support under Ruby Enterprise Edition 1.8.
+
+Package: libpassenger-ruby1.9.1
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ruby1.9.1, rubygems1.9.1 (>= 1.2)
+Provides: libpassenger-ruby-any
+Description: Phusion Passenger spawn server (Ruby 1.9.1)
+ Phusion Passenger - a.k.a. mod_rails or mod_rack - makes deployment of Ruby
+ web applications, such as those built on the revolutionary Ruby on Rails web
+ framework, a breeze.
+ .
+ This package provides the bits of Phusion Passenger common to both its Apache
+ and nginx support under Ruby 1.9.1.
+
+Package: passenger-spawn-server
+Architecture: any
+Depends: ${misc:Depends}, libpassenger-ruby-any
+Description: Phusion Passenger spawn server binary
+ Phusion Passenger - a.k.a. mod_rails or mod_rack - makes deployment of Ruby
+ web applications, such as those built on the revolutionary Ruby on Rails web
+ framework, a breeze.
+
+Package: passenger-admin-tools
+Architecture: any
+Depends: ${misc:Depends}, ruby, libpassenger-ruby
+Suggests: passenger-doc
+Description: Phusion Passenger administrative binaries
+ Phusion Passenger - a.k.a. mod_rails or mod_rack - makes deployment of Ruby
+ web applications, such as those built on the revolutionary Ruby on Rails web
+ framework, a breeze.
+
+Package: libapache2-mod-passenger
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ruby, libpassenger-ruby,
+ passenger-spawn-server, apache2-mpm-worker (>= 2.2.9-9) |
+ apache2-mpm-prefork (>= 2.2.9-9) | apache2-mpm-itk (>= 2.2.9-9)
+Recommends: passenger-admin-tools
+Suggests: passenger-doc, rails, librack-ruby (>= 1.0.0), python
+Description: Fast deployment of Rails, Rack applications with Apache2
+ Phusion Passenger - a.k.a. mod_rails or mod_rack - makes deployment of Ruby
+ web applications, such as those built on the revolutionary Ruby on Rails web
+ framework, a breeze.
+
+Package: passenger-nginx-helper-server
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, passenger-spawn-server
+Recommends: passenger-admin-tools
+Suggests: passenger-doc, rails, librack-ruby (>= 1.0.0), python
+Description: Fast deployment of Rails, Rack applications (nginx module mediator)
+ Phusion Passenger - a.k.a. mod_rails or mod_rack - makes deployment of Ruby
+ web applications, such as those built on the revolutionary Ruby on Rails web
+ framework, a breeze.
+ .
+ This package provides HelperServer mediator for nginx with Passenger module.
+
+Package: passenger-nginx-module-dev
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libstdc++6 | libstdc++5
+Description: Phusion Passenger nginx module (development files)
+ Phusion Passenger - a.k.a. mod_rails or mod_rack - makes deployment of Ruby
+ web applications, such as those built on the revolutionary Ruby on Rails web
+ framework, a breeze.
+ .
+ This package provides source files and libraries for compiling nginx with
+ Passenger module.
+
+Package: passenger-doc
+Section: doc
+Architecture: all
+Description: Fast deployment of Rails, Rack applications - documentation
+ Phusion Passenger - a.k.a. mod_rails or mod_rack - makes deployment of Ruby
+ web applications, such as those built on the revolutionary Ruby on Rails web
+ framework, a breeze.
+ .
+ This package provides the documentation for Phusion Passenger.

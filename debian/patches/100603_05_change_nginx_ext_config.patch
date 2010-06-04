@@ -1,0 +1,48 @@
+Index: passenger-2.2.11/ext/nginx/config
+===================================================================
+--- passenger-2.2.11.orig/ext/nginx/config	2010-06-03 11:26:39.000000000 +0300
++++ passenger-2.2.11/ext/nginx/config	2010-06-03 16:46:26.000000000 +0300
+@@ -1,30 +1,22 @@
+-if ! test -f "$ngx_addon_dir/libpassenger_common.a" || \
+-   ! test -f "$ngx_addon_dir/libboost_oxt.a"; then
+-    echo "*** The Phusion Passenger support files are not yet compiled. Compiling them for you... ***"
+-    echo "*** Running 'rake nginx' in $ngx_addon_dir... ***"
+-    if ! (cd $ngx_addon_dir; rake nginx); then
+-        exit 1
+-    else
+-        echo "*** Phusion Passenger support files have been successfully compiled. ***"
+-    fi
+-fi
++nginx_addon_sourcedir=/usr/include/phusion_passenger/nginx
++nginx_addon_libdir=/usr/lib/phusion_passenger/nginx_module
+ 
+ ngx_addon_name=ngx_http_passenger_module
+ HTTP_MODULES="$HTTP_MODULES ngx_http_passenger_module"
+ NGX_ADDON_SRCS="$NGX_ADDON_SRCS \
+-    ${ngx_addon_dir}/ngx_http_passenger_module.c \
+-    ${ngx_addon_dir}/Configuration.c \
+-    ${ngx_addon_dir}/ContentHandler.c \
+-    ${ngx_addon_dir}/StaticContentHandler.c"
++    ${nginx_addon_sourcedir}/ngx_http_passenger_module.c \
++    ${nginx_addon_sourcedir}/Configuration.c \
++    ${nginx_addon_sourcedir}/ContentHandler.c \
++    ${nginx_addon_sourcedir}/StaticContentHandler.c"
+ NGX_ADDON_DEPS="$NGX_ADDON_DEPS \
+-    ${ngx_addon_dir}/Configuration.h \
+-    ${ngx_addon_dir}/ContentHandler.h \
+-    ${ngx_addon_dir}/StaticContentHandler.h \
+-    ${ngx_addon_dir}/ngx_http_passenger_module.h \
+-    ${ngx_addon_dir}/../common/Version.h"
++    ${nginx_addon_sourcedir}/Configuration.h \
++    ${nginx_addon_sourcedir}/ContentHandler.h \
++    ${nginx_addon_sourcedir}/StaticContentHandler.h \
++    ${nginx_addon_sourcedir}/ngx_http_passenger_module.h \
++    ${nginx_addon_sourcedir}/../common/Version.h"
+ CORE_LIBS="$CORE_LIBS  \
+-    ${ngx_addon_dir}/libpassenger_common.a \
+-    ${ngx_addon_dir}/libboost_oxt.a \
++    ${nginx_addon_libdir}/libpassenger_common.a \
++    ${nginx_addon_libdir}/libboost_oxt.a \
+     -lstdc++ -lpthread"
+ if test x`uname` = xOpenBSD; then
+     CORE_LIBS="$CORE_LIBS -lm"

@@ -1,0 +1,4 @@
+debian/tmp/usr/share/doc/phusion_passenger/*.html
+debian/tmp/usr/share/doc/phusion_passenger/images
+debian/tmp/usr/share/doc/phusion_passenger/cxxapi
+debian/tmp/usr/share/doc/phusion_passenger/rdoc

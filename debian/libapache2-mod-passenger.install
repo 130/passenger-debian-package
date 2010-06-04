@@ -1,0 +1,3 @@
+usr/lib/phusion_passenger/ApplicationPoolServerExecutable
+usr/lib/phusion_passenger/mod_passenger.so usr/lib/apache2/modules
+../passenger.{conf,load} etc/apache2/mods-available

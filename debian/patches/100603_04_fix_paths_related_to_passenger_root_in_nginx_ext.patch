@@ -1,0 +1,26 @@
+Index: passenger-2.2.11/ext/nginx/HelperServer.cpp
+===================================================================
+--- passenger-2.2.11.orig/ext/nginx/HelperServer.cpp	2010-06-03 11:00:23.000000000 +0300
++++ passenger-2.2.11/ext/nginx/HelperServer.cpp	2010-06-03 11:00:58.000000000 +0300
+@@ -709,7 +709,7 @@
+ 		}
+ 		
+ 		pool = ptr(new StandardApplicationPool(
+-			rootDir + "/bin/passenger-spawn-server",
++			rootDir + "/lib/phusion_passenger/passenger-spawn-server",
+ 			"", ruby
+ 		));
+ 		pool->setMax(maxPoolSize);
+Index: passenger-2.2.11/ext/nginx/ngx_http_passenger_module.c
+===================================================================
+--- passenger-2.2.11.orig/ext/nginx/ngx_http_passenger_module.c	2010-06-03 11:01:04.000000000 +0300
++++ passenger-2.2.11/ext/nginx/ngx_http_passenger_module.c	2010-06-03 11:01:57.000000000 +0300
+@@ -158,7 +158,7 @@
+     
+     ngx_memzero(helper_server_filename, sizeof(helper_server_filename));
+     ngx_snprintf(helper_server_filename, sizeof(helper_server_filename),
+-                     "%s/ext/nginx/HelperServer",
++                     "%s/lib/phusion_passenger/HelperServer",
+                      main_conf->root_dir.data);
+     
+     ngx_memzero(log_level_string, sizeof(log_level_string));

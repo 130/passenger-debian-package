@@ -1,0 +1,93 @@
+#!/usr/bin/make -f
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+
+base_rake = /usr/bin/rake
+
+bindir = /usr/bin
+sbindir = /usr/sbin
+docdir = /usr/share/doc
+
+libpassenger_package_prefix = libpassenger-ruby
+all_libpassenger_packages = $(filter $(libpassenger_package_prefix)%,$(DEB_ALL_PACKAGES))
+libpassenger_packages = $(filter-out $(libpassenger_package_prefix),$(all_libpassenger_packages))
+
+admintools = passenger-status passenger-memory-stats passenger-make-enterprisey
+
+src_builddir = $(CURDIR)/pkg/fakeroot
+src_extdir = $(CURDIR)/ext
+src_nginxdir = $(src_extdir)/nginx
+
+dest_libdir = $(DEB_DESTDIR)/usr/lib/phusion_passenger
+dest_nginx_module_libdir = $(dest_libdir)/nginx_module
+list_install_to_nginx_module_libdir = $(addprefix $(src_nginxdir)/, \
+	config \
+	libboost_oxt.a \
+	libpassenger_common.a \
+)
+
+dest_includedir = $(DEB_DESTDIR)/usr/include/phusion_passenger
+list_includedir_subdirs = common nginx
+list_install_to_includedir_common = $(addprefix $(src_extdir)/common/, \
+	Version.h \
+	CachedFileStat.h \
+)
+list_install_to_includedir_nginx = $(addprefix $(src_extdir)/nginx/, \
+	ngx_http_passenger_module.[hc] \
+	Configuration.[hc] \
+	ContentHandler.[hc] \
+	StaticContentHandler.[hc] \
+)
+
+clean::
+	$(base_rake) clean clobber
+	rm -f stamp-*
+
+common-build-arch common-build-indep:: debian/stamp-builded
+
+debian/stamp-builded:
+	$(base_rake) fakeroot nginx
+	touch $@
+
+common-install-arch common-install-indep:: debian/stamp-installed
+
+debian/stamp-installed:
+	mv $(src_builddir) $(DEB_DESTDIR)
+	mv $(src_nginxdir)/HelperServer $(dest_libdir)
+	mkdir -p $(dest_nginx_module_libdir)
+	for file in $(list_install_to_nginx_module_libdir); do \
+		cp $$file $(dest_nginx_module_libdir); \
+	done
+	$(strip $(foreach subdir, $(list_includedir_subdirs), \
+		mkdir -p $(dest_includedir)/$(subdir); \
+		cp \
+			$(list_install_to_includedir_$(subdir)) \
+			$(dest_includedir)/$(subdir); \
+	))
+	touch $@
+
+not_ruby18_package = $(if $(findstring ruby1.8,$(1)),,not_ruby18_package)
+make_alt_rake_path = $(patsubst $(libpassenger_package_prefix)%,$(base_rake)%,$(1))
+
+$(patsubst %,install/%,$(libpassenger_packages))::
+	$(if $(call not_ruby18_package, $(cdbs_curpkg)), \
+		$(eval rake = $(call make_alt_rake_path,$(cdbs_curpkg))), \
+		$(eval rake = $(base_rake)) \
+	)
+	$(rake) native_support:clean fakeroot
+	cp -Rf $(src_builddir)/usr/lib/ruby $(DEB_DESTDIR)/usr/lib
+
+binary-post-install/passenger-admin-tools::
+	$(eval installdir = $(CURDIR)/debian/$(cdbs_curpkg))
+	rm $(installdir)/$(bindir)/passenger-install-*
+	mkdir -p $(installdir)/$(sbindir)
+	for tool in $(admintools); do \
+		mv $(installdir)/$(bindir)/$$tool $(installdir)/$(sbindir); \
+	done;
+
+binary-post-install/passenger-doc::
+	$(eval installdir = $(CURDIR)/debian/$(cdbs_curpkg))
+	mkdir -p $(installdir)/$(docdir)/$(cdbs_curpkg)/html
+	mv \
+		$(installdir)/$(docdir)/$(cdbs_curpkg)/{*.html,images} \
+		$(installdir)/$(docdir)/$(cdbs_curpkg)/html
